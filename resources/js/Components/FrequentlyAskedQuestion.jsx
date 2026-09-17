@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { ChevronDown, HelpCircle, MessageCircle } from "lucide-react";
 
-const faqs = [
+// আগের ৫টি ডিফল্ট প্রশ্ন (ডাটাবেজ খালি থাকলে এটি দেখাবে)
+const defaultFaqs = [
   {
     question: "What makes Pure Sip drinks 100% natural and unique?",
     answer:
@@ -29,8 +30,12 @@ const faqs = [
   },
 ];
 
-export default function FrequentlyAskedQuestion() {
+// faqs প্রপস রিসিভ করা হচ্ছে
+export default function FrequentlyAskedQuestion({ faqs = [] }) {
   const [openIndex, setOpenIndex] = useState(0);
+
+  // ডাটাবেজে ডাটা থাকলে তা দেখাবে, না থাকলে ডিফল্ট প্রশ্নগুলো দেখাবে
+  const activeFaqs = Array.isArray(faqs) && faqs.length > 0 ? faqs : defaultFaqs;
 
   const toggleFAQ = (index) => {
     setOpenIndex(openIndex === index ? -1 : index);
@@ -56,7 +61,7 @@ export default function FrequentlyAskedQuestion() {
 
         {/* Accordion List */}
         <div className="space-y-4">
-          {faqs.map((faq, index) => {
+          {activeFaqs.map((faq, index) => {
             const isOpen = openIndex === index;
             return (
               <div

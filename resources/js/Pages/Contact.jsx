@@ -1,4 +1,5 @@
-import { Head, useForm } from "@inertiajs/react";
+import React from "react";
+import { Head, useForm, Link } from "@inertiajs/react";
 import { 
   PhoneCall, 
   Mail, 
@@ -14,8 +15,7 @@ import {
 import Header from "@/Components/Header";
 import Footer from "@/Components/Footer";
 
-export default function Contact() {
-  // Inertia Form Hook
+export default function Contact({ settings = {} }) {
   const { data, setData, post, processing, errors, reset, recentlySuccessful } = useForm({
     name: "",
     phone: "",
@@ -32,12 +32,29 @@ export default function Contact() {
     });
   };
 
+  const contactPage = settings?.contact_page || {};
+  const badge = contactPage?.badge || "LET'S CONNECT";
+  const title = contactPage?.title || "Get in Touch with";
+  const highlight = contactPage?.highlight || "Pure Sip Beverage";
+  const subtitle = contactPage?.subtitle || "Have questions about our botanical formulas, want to stock our Tk 10 pouches at your shop, or planning bulk orders for events? We are here to help.";
+  const addressTitle = contactPage?.address_title || "Production & Office";
+  const addressDesc = contactPage?.address_desc || "Pure Sip Beverage, Dhaka, Bangladesh";
+  const email = contactPage?.email || settings?.email || "info@puresipbeverage.com";
+  const hours = contactPage?.hours || "Saturday – Thursday: 9:00 AM – 8:00 PM";
+  const wholesaleTitle = contactPage?.wholesale_banner_title || "Looking for Wholesale Supply in Dhaka?";
+  const wholesaleDesc = contactPage?.wholesale_banner_desc || "We supply insulated, chilled batches directly to grocery stores, restaurants, and eateries within 24 hours.";
+
+  const primaryPhone = settings?.phone_primary || "01306-312372";
+  const secondaryPhone = settings?.phone_secondary || "018265-813373";
+  const whatsappNum = settings?.whatsapp_number || "+8801306312372";
+  const whatsappClean = whatsappNum.replace(/[^0-9]/g, '');
+
   return (
     <>
       <Head title="Contact Us - Wholesale & Dealership | Pure Sip Beverage" />
 
       <div className="min-h-screen bg-[#f4faf4] flex flex-col justify-between selection:bg-[#183928] selection:text-white">
-        <Header />
+        <Header settings={settings} />
 
         <main className="w-full flex-1 block">
 
@@ -46,16 +63,16 @@ export default function Contact() {
             <div className="max-w-3xl mx-auto text-center space-y-4">
               <div className="inline-flex items-center gap-2 bg-[#183928] text-emerald-300 text-xs font-black tracking-widest uppercase px-4 py-1.5 rounded-full shadow-sm">
                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                <span>LET&apos;S CONNECT</span>
+                <span>{badge}</span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#112318] tracking-tight leading-[1.15]">
-                Get in Touch with <br />
-                <span className="text-[#183928]">Pure Sip Beverage</span>
+                {title} <br />
+                <span className="text-[#183928]">{highlight}</span>
               </h1>
 
               <p className="text-gray-600 text-sm sm:text-base md:text-lg leading-relaxed font-normal max-w-2xl mx-auto">
-                Have questions about our botanical formulas, want to stock our Tk 10 pouches at your shop, or planning bulk orders for events? We are here to help.
+                {subtitle}
               </p>
             </div>
           </section>
@@ -81,7 +98,7 @@ export default function Contact() {
 
                   <div className="space-y-3 pt-2">
                     <a
-                      href="tel:01306312372"
+                      href={`tel:${primaryPhone}`}
                       className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-white/10 hover:bg-white/20 transition-all active:scale-98"
                     >
                       <div className="w-11 h-11 rounded-xl bg-white text-[#183928] flex items-center justify-center font-bold shadow-sm flex-shrink-0">
@@ -89,25 +106,27 @@ export default function Contact() {
                       </div>
                       <div>
                         <p className="text-[11px] text-emerald-300 font-semibold">Primary Helpline</p>
-                        <p className="text-sm sm:text-base font-black tracking-wide text-white">01306-312372</p>
+                        <p className="text-sm sm:text-base font-black tracking-wide text-white">{primaryPhone}</p>
                       </div>
                     </a>
 
-                    <a
-                      href="tel:018265813373"
-                      className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-white/10 hover:bg-white/20 transition-all active:scale-98"
-                    >
-                      <div className="w-11 h-11 rounded-xl bg-white text-[#183928] flex items-center justify-center font-bold shadow-sm flex-shrink-0">
-                        <PhoneCall className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-[11px] text-emerald-300 font-semibold">Dealership & Distribution</p>
-                        <p className="text-sm sm:text-base font-black tracking-wide text-white">018265-813373</p>
-                      </div>
-                    </a>
+                    {secondaryPhone && (
+                      <a
+                        href={`tel:${secondaryPhone}`}
+                        className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-white/10 hover:bg-white/20 transition-all active:scale-98"
+                      >
+                        <div className="w-11 h-11 rounded-xl bg-white text-[#183928] flex items-center justify-center font-bold shadow-sm flex-shrink-0">
+                          <PhoneCall className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <p className="text-[11px] text-emerald-300 font-semibold">Dealership & Distribution</p>
+                          <p className="text-sm sm:text-base font-black tracking-wide text-white">{secondaryPhone}</p>
+                        </div>
+                      </a>
+                    )}
 
                     <a
-                      href="https://wa.me/8801306312372"
+                      href={`https://wa.me/${whatsappClean}`}
                       target="_blank"
                       rel="noreferrer"
                       className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-emerald-700/70 hover:bg-emerald-700 transition-all active:scale-98"
@@ -117,7 +136,7 @@ export default function Contact() {
                       </div>
                       <div>
                         <p className="text-[11px] text-emerald-200 font-semibold">WhatsApp Inquiry</p>
-                        <p className="text-sm sm:text-base font-black tracking-wide text-white">+880 1306-312372</p>
+                        <p className="text-sm sm:text-base font-black tracking-wide text-white">{whatsappNum}</p>
                       </div>
                     </a>
                   </div>
@@ -130,9 +149,9 @@ export default function Contact() {
                         <MapPin className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="text-sm font-black text-[#112318]">Production & Office</h3>
+                        <h3 className="text-sm font-black text-[#112318]">{addressTitle}</h3>
                         <p className="text-xs text-gray-600 mt-0.5 leading-relaxed">
-                          Pure Sip Beverage, Dhaka, Bangladesh
+                          {addressDesc}
                         </p>
                       </div>
                     </div>
@@ -144,7 +163,7 @@ export default function Contact() {
                       <div>
                         <h3 className="text-sm font-black text-[#112318]">Official Email</h3>
                         <p className="text-xs text-gray-600 mt-0.5">
-                          info@puresipbeverage.com
+                          {email}
                         </p>
                       </div>
                     </div>
@@ -156,7 +175,7 @@ export default function Contact() {
                       <div>
                         <h3 className="text-sm font-black text-[#112318]">Operational Hours</h3>
                         <p className="text-xs text-gray-600 mt-0.5">
-                          Saturday – Thursday: 9:00 AM – 8:00 PM
+                          {hours}
                         </p>
                       </div>
                     </div>
@@ -179,9 +198,8 @@ export default function Contact() {
                   </p>
                 </div>
 
-                {/* সফলভাবে ডাটাবেজে সাবমিট হলে নোটিফিকেশন */}
                 {recentlySuccessful && (
-                  <div className="p-4 rounded-2xl bg-[#eef7ef] text-[#183928] flex items-center gap-3 text-xs sm:text-sm font-bold border border-emerald-200 animate-in fade-in-50 duration-300">
+                  <div className="p-4 rounded-2xl bg-[#eef7ef] text-[#183928] flex items-center gap-3 text-xs sm:text-sm font-bold border border-emerald-200">
                     <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
                     <span>Thank you! Your inquiry has been sent and saved. We will contact you shortly.</span>
                   </div>
@@ -189,7 +207,6 @@ export default function Contact() {
 
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    {/* Name */}
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-[#112318] uppercase tracking-wider block">
                         Full Name *
@@ -205,7 +222,6 @@ export default function Contact() {
                       {errors.name && <p className="text-xs text-red-500 font-medium">{errors.name}</p>}
                     </div>
 
-                    {/* Phone */}
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-[#112318] uppercase tracking-wider block">
                         Phone Number *
@@ -223,7 +239,6 @@ export default function Contact() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    {/* Email */}
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-[#112318] uppercase tracking-wider block">
                         Email Address
@@ -238,7 +253,6 @@ export default function Contact() {
                       {errors.email && <p className="text-xs text-red-500 font-medium">{errors.email}</p>}
                     </div>
 
-                    {/* Inquiry Type */}
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-[#112318] uppercase tracking-wider block">
                         Inquiry Reason
@@ -256,7 +270,6 @@ export default function Contact() {
                     </div>
                   </div>
 
-                  {/* Message */}
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-[#112318] uppercase tracking-wider block">
                       Your Requirement / Message *
@@ -272,7 +285,6 @@ export default function Contact() {
                     {errors.message && <p className="text-xs text-red-500 font-medium">{errors.message}</p>}
                   </div>
 
-                  {/* Submit Button */}
                   <button
                     type="submit"
                     disabled={processing}
@@ -297,19 +309,19 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="text-base sm:text-lg font-bold text-[#112318]">
-                      Looking for Wholesale Supply in Dhaka?
+                      {wholesaleTitle}
                     </h3>
                     <p className="text-xs sm:text-sm text-gray-600 mt-0.5">
-                      We supply insulated, chilled batches directly to grocery stores, restaurants, and eateries within 24 hours.
+                      {wholesaleDesc}
                     </p>
                   </div>
                 </div>
 
                 <a
-                  href="tel:01306312372"
+                  href={`tel:${primaryPhone}`}
                   className="bg-[#183928] text-white hover:bg-[#122c1f] text-xs sm:text-sm font-black px-7 py-3.5 rounded-xl shadow whitespace-nowrap transition-all active:scale-95"
                 >
-                  Call: 01306-312372
+                  Call: {primaryPhone}
                 </a>
               </div>
             </div>
@@ -317,7 +329,7 @@ export default function Contact() {
 
         </main>
 
-        <Footer />
+        <Footer settings={settings} />
       </div>
     </>
   );

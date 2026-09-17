@@ -22,18 +22,27 @@ import Header from "@/Components/Header";
 import Footer from "@/Components/Footer";
 import { products as fallbackProducts } from "@/data/products";
 
-const categories = [
+const defaultCategories = [
   { id: "all", label: "All Drinks" },
   { id: "digestive", label: "Digestive & Gut" },
   { id: "refreshing", label: "Cooling & Tangy" },
   { id: "immunity", label: "Immunity Boost" },
 ];
 
-export default function OurDrinks({ products: dbProducts = [] }) {
+export default function OurDrinks({ products: dbProducts = [], settings = {} }) {
   const [activeCategory, setActiveCategory] = useState("all");
   const swiperRef = useRef(null);
 
   const productList = dbProducts.length > 0 ? dbProducts : fallbackProducts;
+  const ourDrinksPage = settings?.our_drinks_page || {};
+
+  const badge = ourDrinksPage?.badge || "100% BOTANICAL LINEUP";
+  const title = ourDrinksPage?.title || "Crafted for Taste.";
+  const highlight = ourDrinksPage?.highlight || "Brewed for Well-Being.";
+  const subtitle = ourDrinksPage?.subtitle || "Explore our handcrafted lineup of cold-extracted botanical juices. Made with raw fruits, garden mint, and Ayurvedic spices—every pouch strictly priced at just Tk 10.";
+  const categoriesList = Array.isArray(ourDrinksPage?.categories) && ourDrinksPage.categories.length > 0 
+    ? ourDrinksPage.categories 
+    : defaultCategories;
 
   // ক্যাটাগরি ফিল্টার
   const baseFilteredProducts = productList.filter((item) => {
@@ -44,10 +53,9 @@ export default function OurDrinks({ products: dbProducts = [] }) {
     if (activeCategory === "digestive") return cat === "digestive" || id.includes("hozmi");
     if (activeCategory === "refreshing") return cat === "refreshing" || id.includes("pudina") || id.includes("green");
     if (activeCategory === "immunity") return cat === "immunity" || id.includes("citrus");
-    return true;
+    return cat === activeCategory;
   });
 
-  // স্লাইডার ইনফিনিট লুপ
   const displayProducts = baseFilteredProducts.length > 0 && baseFilteredProducts.length < 8
     ? [...baseFilteredProducts, ...baseFilteredProducts, ...baseFilteredProducts]
     : baseFilteredProducts;
@@ -57,7 +65,7 @@ export default function OurDrinks({ products: dbProducts = [] }) {
       <Head title="Our Drinks - Handcrafted Botanical Flavors | Pure Sip" />
 
       <div className="min-h-screen bg-[#f4faf4] flex flex-col justify-between selection:bg-[#183928] selection:text-white">
-        <Header />
+        <Header settings={settings} />
 
         <main className="w-full flex-1 block">
 
@@ -66,20 +74,20 @@ export default function OurDrinks({ products: dbProducts = [] }) {
             <div className="max-w-4xl mx-auto text-center space-y-4">
               <div className="inline-flex items-center gap-2 bg-[#183928] text-emerald-300 text-xs font-black tracking-widest uppercase px-4 py-1.5 rounded-full shadow-sm">
                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                <span>100% BOTANICAL LINEUP</span>
+                <span>{badge}</span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#112318] tracking-tight leading-[1.15]">
-                Crafted for Taste. <br />
-                <span className="text-[#183928]">Brewed for Well-Being.</span>
+                {title} <br />
+                <span className="text-[#183928]">{highlight}</span>
               </h1>
 
               <p className="text-gray-600 text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto font-normal">
-                Explore our handcrafted lineup of cold-extracted botanical juices. Made with raw fruits, garden mint, and Ayurvedic spices—every pouch strictly priced at just Tk 10.
+                {subtitle}
               </p>
 
               <div className="flex flex-wrap items-center justify-center gap-2.5 pt-4">
-                {categories.map((cat) => (
+                {categoriesList.map((cat) => (
                   <button
                     key={cat.id}
                     type="button"
@@ -199,13 +207,13 @@ export default function OurDrinks({ products: dbProducts = [] }) {
                                 Key Ingredients:
                               </span>
                               <div className="flex flex-wrap gap-1.5 min-h-[54px] content-start">
-                                {item.ingredients && item.ingredients.slice(0, 3).map((ing, i) => (
+                                {item.ingredients && Array.isArray(item.ingredients) && item.ingredients.slice(0, 3).map((ing, i) => (
                                   <span
                                     key={i}
                                     className="inline-flex items-center gap-1 text-[10px] font-bold bg-[#eef7ef] text-[#183928] px-2.5 py-1 rounded-md h-fit"
                                   >
                                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                                    <span className="truncate max-w-[130px]">{ing.name}</span>
+                                    <span className="truncate max-w-[130px]">{typeof ing === 'string' ? ing : ing.name}</span>
                                   </span>
                                 ))}
                               </div>
@@ -314,7 +322,7 @@ export default function OurDrinks({ products: dbProducts = [] }) {
 
         </main>
 
-        <Footer />
+        <Footer settings={settings} />
       </div>
     </>
   );

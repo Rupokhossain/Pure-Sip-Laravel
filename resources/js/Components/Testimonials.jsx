@@ -8,7 +8,8 @@ import {
   Sparkles 
 } from "lucide-react";
 
-const reviews = [
+// ফলব্যাক ডিফল্ট রিভিউসমূহ (ডাটাবেজ ফাঁকা থাকলে এগুলো দেখাবে)
+const defaultReviews = [
   {
     id: 1,
     name: "Tanvir Ahmed",
@@ -51,29 +52,41 @@ const reviews = [
   },
 ];
 
-export default function Testimonials() {
+// Welcome.jsx থেকে পাঠানো reviews প্রপস রিসিভ করা হচ্ছে
+export default function Testimonials({ reviews = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
+  // ডাটাবেজে ডাটা থাকলে তা নিবে, না থাকলে ডিফল্ট রিভিউ দেখাবে
+  const activeReviews = Array.isArray(reviews) && reviews.length > 0 ? reviews : defaultReviews;
+
+  // কোনো রিভিউ ডিলিট হয়ে ইনডেক্স আউট অফ বাউন্ড হওয়া ঠেকাতে
   useEffect(() => {
-    if (isPaused) return;
+    if (currentIndex >= activeReviews.length) {
+      setCurrentIndex(0);
+    }
+  }, [activeReviews.length, currentIndex]);
+
+  // অটো-স্লাইডার
+  useEffect(() => {
+    if (isPaused || activeReviews.length <= 1) return;
 
     const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev === reviews.length - 1 ? 0 : prev + 1));
+      setCurrentIndex((prev) => (prev >= activeReviews.length - 1 ? 0 : prev + 1));
     }, 4000);
 
     return () => clearInterval(timer);
-  }, [isPaused, currentIndex]);
+  }, [isPaused, activeReviews.length]);
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev === 0 ? reviews.length - 1 : prev - 1));
+    setCurrentIndex((prev) => (prev === 0 ? activeReviews.length - 1 : prev - 1));
   };
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev === reviews.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) => (prev >= activeReviews.length - 1 ? 0 : prev + 1));
   };
 
-  const activeReview = reviews[currentIndex];
+  const activeReview = activeReviews[currentIndex] || activeReviews[0] || {};
 
   return (
     <section className="py-20 px-4 sm:px-8 lg:px-12 w-full bg-[#f4faf4] selection:bg-[#183928] selection:text-white relative overflow-hidden">
@@ -106,32 +119,39 @@ export default function Testimonials() {
           <div className="space-y-6 relative z-10">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-1">
-                {[...Array(activeReview.rating)].map((_, i) => (
+                {[...Array(Number(activeReview?.rating) || 5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
-                <span className="text-xs font-bold text-gray-700 ml-1.5">5.0 / 5.0</span>
+                <span className="text-xs font-bold text-gray-700 ml-1.5">
+                  {(Number(activeReview?.rating) || 5).toFixed(1)} / 5.0
+                </span>
               </div>
 
-              <span className="inline-flex items-center text-xs font-bold text-[#183928] bg-[#eef7ef] px-3.5 py-1 rounded-full">
-                {activeReview.drink}
-              </span>
+              {activeReview?.drink && (
+                <span className="inline-flex items-center text-xs font-bold text-[#183928] bg-[#eef7ef] px-3.5 py-1 rounded-full">
+                  {activeReview.drink}
+                </span>
+              )}
             </div>
 
             <p className="text-lg sm:text-xl md:text-2xl font-semibold text-[#112318] leading-relaxed tracking-tight min-h-[80px] flex items-center">
-              &ldquo;{activeReview.feedback}&rdquo;
+              &ldquo;{activeReview?.feedback}&rdquo;
             </p>
 
             <div className="pt-6 flex items-center justify-between gap-4">
               <div className="flex items-center gap-3.5">
                 <div className="w-12 h-12 rounded-full bg-[#183928] text-white flex items-center justify-center font-black text-lg shadow-md">
-                  {activeReview.name.charAt(0)}
+                  {activeReview?.name ? activeReview.name.charAt(0).toUpperCase() : "P"}
                 </div>
                 <div>
                   <h4 className="text-base font-bold text-[#112318]">
-                    {activeReview.name}
+                    {activeReview?.name || "Customer"}
                   </h4>
                   <p className="text-xs text-gray-500">
-                    {activeReview.location} • <span className="font-semibold text-emerald-800">{activeReview.role}</span>
+                    {activeReview?.location || "Bangladesh"} •{" "}
+                    <span className="font-semibold text-emerald-800">
+                      {activeReview?.role || "Verified Sipper"}
+                    </span>
                   </p>
                 </div>
               </div>
@@ -144,38 +164,41 @@ export default function Testimonials() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-4 pt-2">
-          <button
-            onClick={prevSlide}
-            aria-label="Previous Review"
-            className="w-12 h-12 rounded-full bg-white hover:bg-[#183928] text-[#183928] hover:text-white shadow-md flex items-center justify-center transition-all active:scale-95 cursor-pointer"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
+        {/* স্লাইডার নেভিগেশন বাটনসমূহ */}
+        {activeReviews.length > 1 && (
+          <div className="flex items-center justify-between gap-4 pt-2">
+            <button
+              onClick={prevSlide}
+              aria-label="Previous Review"
+              className="w-12 h-12 rounded-full bg-white hover:bg-[#183928] text-[#183928] hover:text-white shadow-md flex items-center justify-center transition-all active:scale-95 cursor-pointer"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
 
-          <div className="flex items-center gap-2">
-            {reviews.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentIndex(idx)}
-                aria-label={`Go to review ${idx + 1}`}
-                className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-                  currentIndex === idx
-                    ? "w-8 bg-[#183928]"
-                    : "w-2.5 bg-gray-300 hover:bg-gray-400"
-                }`}
-              />
-            ))}
+            <div className="flex items-center gap-2">
+              {activeReviews.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentIndex(idx)}
+                  aria-label={`Go to review ${idx + 1}`}
+                  className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                    currentIndex === idx
+                      ? "w-8 bg-[#183928]"
+                      : "w-2.5 bg-gray-300 hover:bg-gray-400"
+                  }`}
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={nextSlide}
+              aria-label="Next Review"
+              className="w-12 h-12 rounded-full bg-white hover:bg-[#183928] text-[#183928] hover:text-white shadow-md flex items-center justify-center transition-all active:scale-95 cursor-pointer"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
           </div>
-
-          <button
-            onClick={nextSlide}
-            aria-label="Next Review"
-            className="w-12 h-12 rounded-full bg-white hover:bg-[#183928] text-[#183928] hover:text-white shadow-md flex items-center justify-center transition-all active:scale-95 cursor-pointer"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
+        )}
 
       </div>
     </section>

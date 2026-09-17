@@ -10,30 +10,26 @@ import {
 import Header from "@/Components/Header";
 import Footer from "@/Components/Footer";
 
-const pillars = [
+const defaultPillars = [
   {
-    icon: Leaf,
     title: "100% Native Botanicals",
     desc: "We work directly with growers to source fragrant garden mint from Sylhet, sun-dried cumin, ginger, and wild raw mangoes.",
   },
   {
-    icon: ShieldCheck,
     title: "Zero Chemical Compromise",
     desc: "Strictly no synthetic food colorings, artificial carbonation syrups, or chemical preservatives. Just raw, living plants.",
   },
   {
-    icon: Award,
     title: "Radical Accessibility (Tk 10)",
     desc: "Health should never be a luxury. By skipping costly heavy glass and distributor middlemen, we make pure organic wellness accessible to all.",
   },
   {
-    icon: Droplet,
     title: "Small-Batch Cold Craft",
     desc: "Cold-extracted in controlled small batches in Dhaka to preserve vital enzymes, micronutrients, and delicate aromatic oils.",
   },
 ];
 
-const timelineSteps = [
+const defaultTimeline = [
   {
     step: "01",
     title: "Direct Regional Sourcing",
@@ -56,13 +52,34 @@ const timelineSteps = [
   },
 ];
 
-export default function About() {
+const defaultIcons = [Leaf, ShieldCheck, Award, Droplet];
+
+export default function About({ settings = {} }) {
+  const about = settings?.about_page || {};
+
+  const badge = about?.badge || "THE PURE SIP STORY";
+  const title = about?.title || "Reclaiming Real Taste.";
+  const highlight = about?.highlight || "Born in Bangladesh.";
+  const desc1 = about?.desc_1 || "For decades, the beverage shelves in our country have been dominated by ultra-processed sodas loaded with synthetic syrup, artificial flavors, and harmful chemicals.";
+  const desc2 = about?.desc_2 || "Pure Sip Beverage was founded in Dhaka with a clear mission: reviving time-tested South Asian botanicals—from crushed Sylhet mint to roasted cumin and raw mango—into a crisp, hygienic, modern drink that heals the gut while instantly refreshing the body.";
+  
+  const stat1Val = about?.stat_1_val || "15K+";
+  const stat1Label = about?.stat_1_label || "Sips Enjoyed";
+  const stat2Val = about?.stat_2_val || "100%";
+  const stat2Label = about?.stat_2_label || "Natural Botanical";
+  const stat3Val = about?.stat_3_val || "Tk 10";
+  const stat3Label = about?.stat_3_label || "Honest Price";
+
+  const heroImage = about?.hero_image || "/images/banner.jpeg";
+  const pillarsList = Array.isArray(about?.pillars) && about.pillars.length > 0 ? about.pillars : defaultPillars;
+  const timelineList = Array.isArray(about?.timeline) && about.timeline.length > 0 ? about.timeline : defaultTimeline;
+
   return (
     <>
       <Head title="About Us - Pure Sip Botanical Brewing Story" />
 
       <div className="min-h-screen bg-[#f4faf4] flex flex-col justify-between selection:bg-[#183928] selection:text-white">
-        <Header />
+        <Header settings={settings} />
 
         <main className="w-full flex-1">
 
@@ -71,52 +88,48 @@ export default function About() {
             <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
                 
-                {/* বাম পাশের টেক্সট */}
                 <div className="lg:col-span-7 space-y-6">
                   <div className="inline-flex items-center gap-2 bg-[#183928] text-emerald-300 text-xs font-black tracking-widest uppercase px-4 py-1.5 rounded-full shadow-sm">
                     <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                    <span>THE PURE SIP STORY</span>
+                    <span>{badge}</span>
                   </div>
 
                   <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#112318] tracking-tight leading-[1.12]">
-                    Reclaiming Real Taste. <br />
-                    <span className="text-[#183928]">Born in Bangladesh.</span>
+                    {title} <br />
+                    <span className="text-[#183928]">{highlight}</span>
                   </h1>
 
                   <p className="text-gray-700 text-sm sm:text-base leading-relaxed font-normal">
-                    For decades, the beverage shelves in our country have been dominated by ultra-processed sodas loaded with synthetic syrup, artificial flavors, and harmful chemicals. 
+                    {desc1}
                   </p>
 
                   <p className="text-gray-700 text-sm sm:text-base leading-relaxed font-normal">
-                    <strong>Pure Sip Beverage</strong> was founded in Dhaka with a clear mission: reviving time-tested South Asian botanicals—from crushed Sylhet mint to roasted cumin and raw mango—into a crisp, hygienic, modern drink that heals the gut while instantly refreshing the body.
+                    {desc2}
                   </p>
 
                   <div className="grid grid-cols-3 gap-4 pt-6 border-t border-emerald-900/10">
                     <div>
-                      <h4 className="text-2xl sm:text-3xl font-black text-[#183928]">15K+</h4>
-                      <p className="text-xs text-gray-500 font-medium mt-0.5">Sips Enjoyed</p>
+                      <h4 className="text-2xl sm:text-3xl font-black text-[#183928]">{stat1Val}</h4>
+                      <p className="text-xs text-gray-500 font-medium mt-0.5">{stat1Label}</p>
                     </div>
                     <div>
-                      <h4 className="text-2xl sm:text-3xl font-black text-[#183928]">100%</h4>
-                      <p className="text-xs text-gray-500 font-medium mt-0.5">Natural Botanical</p>
+                      <h4 className="text-2xl sm:text-3xl font-black text-[#183928]">{stat2Val}</h4>
+                      <p className="text-xs text-gray-500 font-medium mt-0.5">{stat2Label}</p>
                     </div>
                     <div>
-                      <h4 className="text-2xl sm:text-3xl font-black text-[#183928]">Tk 10</h4>
-                      <p className="text-xs text-gray-500 font-medium mt-0.5">Honest Price</p>
+                      <h4 className="text-2xl sm:text-3xl font-black text-[#183928]">{stat3Val}</h4>
+                      <p className="text-xs text-gray-500 font-medium mt-0.5">{stat3Label}</p>
                     </div>
                   </div>
                 </div>
 
-                {/* ডান পাশের ইমেজ কার্ড */}
                 <div className="lg:col-span-5 flex justify-center">
                   <div className="relative w-full max-w-[440px] h-[380px] sm:h-[460px] rounded-3xl overflow-hidden shadow-2xl bg-white group">
                     <img
-                      src="/images/banner.jpeg"
+                      src={heroImage}
                       alt="Pure Sip Botanical Brewing Story"
                       className="w-full h-full object-cover object-[80%_center] group-hover:scale-105 transition-transform duration-700"
-                      onError={(e) => {
-                        e.target.src = "https://images.unsplash.com/photo-1622597467836-f3285f2131b7?w=800&auto=format&fit=crop&q=80";
-                      }}
+                      onError={(e) => { e.target.src = "/images/banner.jpeg"; }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
@@ -143,17 +156,17 @@ export default function About() {
                 <div className="inline-flex items-center gap-2 bg-[#183928] text-emerald-300 text-xs font-black tracking-widest uppercase px-4 py-1.5 rounded-full shadow-sm">
                   <span>Our Purity Manifesto</span>
                 </div>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-[#112318] tracking-tight">
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-[#112318] tracking-tight mt-3">
                   Why We Refuse to Cut Corners
                 </h2>
-                <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+                <p className="text-gray-600 text-sm sm:text-base leading-relaxed mt-2">
                   Every formula is built around genuine physiological wellness, sustainable sourcing, and unbeatable affordability.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {pillars.map((item, index) => {
-                  const Icon = item.icon;
+                {pillarsList.map((item, index) => {
+                  const Icon = defaultIcons[index % defaultIcons.length];
                   return (
                     <div
                       key={index}
@@ -195,10 +208,10 @@ export default function About() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                  {timelineSteps.map((step, idx) => (
+                  {timelineList.map((step, idx) => (
                     <div key={idx} className="space-y-3 relative">
                       <span className="text-4xl sm:text-5xl font-black text-[#183928]/15 block">
-                        {step.step}
+                        {step.step || `0${idx + 1}`}
                       </span>
                       <h4 className="text-base font-bold text-[#112318] tracking-tight">
                         {step.title}
@@ -250,7 +263,7 @@ export default function About() {
 
         </main>
 
-        <Footer />
+        <Footer settings={settings} />
       </div>
     </>
   );

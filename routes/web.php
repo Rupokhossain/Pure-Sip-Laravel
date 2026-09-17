@@ -7,7 +7,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-// পাবলিক ডায়নামিক পেজসমূহ
+// পাবলিক ডায়নামিক পেজসমূহ
 Route::get('/', [ProductController::class, 'home'])->name('home');
 Route::get('/our-drinks', [ProductController::class, 'index'])->name('drinks.index');
 Route::get('/products/{slug}', [ProductController::class, 'show'])->name('drinks.show');
@@ -26,7 +26,7 @@ Route::post('/inquiries', [InquiryController::class, 'store'])->name('inquiries.
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     
-    // ইনকোয়ারি রাউটস
+    // ইনকোয়ারি রাউটস
     Route::patch('/admin/inquiries/{inquiry}/status', [AdminDashboardController::class, 'updateInquiryStatus'])->name('admin.inquiries.status');
     Route::delete('/admin/inquiries/{inquiry}', [AdminDashboardController::class, 'destroyInquiry'])->name('admin.inquiries.destroy');
     
