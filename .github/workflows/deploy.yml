@@ -1,0 +1,19 @@
+name: Auto Deploy to cPanel
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull Latest Changes in cPanel
+        run: |
+          curl -k -H "Authorization: cpanel puresipb:${{ secrets.CPANEL_TOKEN }}" \
+            "https://104.194.8.30:2083/execute/VersionControl/update?repository_root=%2Fhome%2Fpuresipb%2Frepositories%2Fpuresip"
+
+      - name: Deploy HEAD Commit
+        run: |
+          curl -k -H "Authorization: cpanel puresipb:${{ secrets.CPANEL_TOKEN }}" \
+            "https://104.194.8.30:2083/execute/VersionControlDeployment/create?repository_root=%2Fhome%2Fpuresipb%2Frepositories%2Fpuresip"
