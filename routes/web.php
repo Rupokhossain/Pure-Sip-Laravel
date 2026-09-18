@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Models\SiteSetting;
 
 // পাবলিক ডায়নামিক পেজসমূহ
 Route::get('/', [ProductController::class, 'home'])->name('home');
@@ -17,7 +18,9 @@ Route::get('/about', function () {
 })->name('about');
 
 Route::get('/contact', function () {
-    return Inertia::render('Contact');
+    return Inertia::render('Contact', [
+        'settings' => SiteSetting::first()
+    ]);
 })->name('contact');
 
 Route::post('/inquiries', [InquiryController::class, 'store'])->name('inquiries.store');

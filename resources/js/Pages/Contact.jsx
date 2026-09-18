@@ -16,6 +16,9 @@ import Header from "@/Components/Header";
 import Footer from "@/Components/Footer";
 
 export default function Contact({ settings = {} }) {
+
+  const contactData = settings?.contact_page || {};
+
   const { data, setData, post, processing, errors, reset, recentlySuccessful } = useForm({
     name: "",
     phone: "",
@@ -44,10 +47,11 @@ export default function Contact({ settings = {} }) {
   const wholesaleTitle = contactPage?.wholesale_banner_title || "Looking for Wholesale Supply in Dhaka?";
   const wholesaleDesc = contactPage?.wholesale_banner_desc || "We supply insulated, chilled batches directly to grocery stores, restaurants, and eateries within 24 hours.";
 
-  const primaryPhone = settings?.phone_primary || "01306-312372";
-  const secondaryPhone = settings?.phone_secondary || "018265-813373";
-  const whatsappNum = settings?.whatsapp_number || "+8801306312372";
-  const whatsappClean = whatsappNum.replace(/[^0-9]/g, '');
+const primaryPhone = contactData?.primary_phone || contactData?.phone_primary || "01306-312372";
+const secondaryPhone = contactData?.dealership_phone || contactData?.phone_secondary || "018265-813373";
+const whatsappNum = contactData?.whatsapp_phone || contactData?.whatsapp_number || "+8801306312372";
+const whatsappClean = whatsappNum.replace(/[^0-9]/g, '');
+
 
   return (
     <>

@@ -22,7 +22,7 @@ class SiteSetting extends Model
         'home_testimonials',
         'about_page',
         'our_drinks_page',
-        'contact_page', // <--- এটি এখানে থাকতে হবে
+        'contact_page', 
         'footer_settings',
         'phone_primary',
         'phone_secondary',

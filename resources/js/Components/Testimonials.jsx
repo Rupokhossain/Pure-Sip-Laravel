@@ -144,10 +144,10 @@ export default function Testimonials({ reviews = [] }) {
                   {activeReview?.name ? activeReview.name.charAt(0).toUpperCase() : "P"}
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-[#112318]">
+                  <h4 className="text-base font-bold text-[#112318] ">
                     {activeReview?.name || "Customer"}
                   </h4>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-500 ">
                     {activeReview?.location || "Bangladesh"} •{" "}
                     <span className="font-semibold text-emerald-800">
                       {activeReview?.role || "Verified Sipper"}

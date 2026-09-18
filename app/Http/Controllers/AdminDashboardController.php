@@ -98,6 +98,9 @@ class AdminDashboardController extends Controller
                 'hours' => 'Saturday – Thursday: 9:00 AM – 8:00 PM',
                 'wholesale_banner_title' => 'Looking for Wholesale Supply in Dhaka?',
                 'wholesale_banner_desc' => 'We supply insulated, chilled batches directly to grocery stores, restaurants, and eateries within 24 hours.',
+                'primary_phone' => '+8801873044692',
+                'dealership_phone' => '018265-813373',
+                'whatsapp_phone' => '+8801873044692',
             ],
             'phone_primary' => '01306-312372',
             'phone_secondary' => '018265-813373',
@@ -168,13 +171,13 @@ class AdminDashboardController extends Controller
             $settings->our_drinks_page = $request->our_drinks_page;
         }
 
-        if ($request->has('contact_page')) {
+if ($request->has('contact_page')) {
             $settings->contact_page = $request->contact_page;
         }
 
         if ($request->has('phone_primary')) $settings->phone_primary = $request->phone_primary;
         
-        // এখানে phone_secondary ফাঁকা বা null আসলে যেন ডাটাবেজে নাল এরর না খায় সেজন্য ডিফল্ট ভ্যালু বা খালি স্ট্রিং সেট করা হয়েছে
+        // এখানে phone_secondary ফাঁকা বা null আসলে যেন ডাটাবেজে নাল এরর না খায় সেজন্য ডিফল্ট ভ্যালু বা খালি স্ট্রিং সেট করা হয়েছে
         if ($request->has('phone_secondary')) {
             $settings->phone_secondary = $request->phone_secondary ?? '';
         }
@@ -307,7 +310,4 @@ class AdminDashboardController extends Controller
 
         return back()->with('success', 'Product updated successfully!');
     }
-
-
-    
 }

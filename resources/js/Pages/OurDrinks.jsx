@@ -172,7 +172,7 @@ export default function OurDrinks({ products: dbProducts = [], settings = {} }) 
                               className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                             />
 
-                            <div className="absolute top-3.5 right-3.5 bg-[#183928] text-white text-xs font-black px-3.5 py-1.5 rounded-full shadow-lg">
+                            <div className="absolute top-3.5 right-3.5 bg-[#183928] text-white text-xs font-black px-4 py-2 rounded-full shadow-lg">
                               {item.price}
                             </div>
 

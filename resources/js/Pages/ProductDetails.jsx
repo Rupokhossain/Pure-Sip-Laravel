@@ -106,7 +106,7 @@ export default function ProductDetails({ product, relatedProducts = [], settings
                   {/* Price & Packaging */}
                   <div className="flex items-center gap-4 py-2 border-y border-gray-100">
                     <div className="text-2xl font-black text-[#183928]">
-                      {product.price} <span className="text-xs text-gray-500 font-normal">/ per pack</span>
+                      {product.price} <span className="text-xs text-gray-500 font-normal">/ package</span>
                     </div>
                     <div className="text-xs font-semibold text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
                       Packaging: {product.net_volume || "200ml"}
