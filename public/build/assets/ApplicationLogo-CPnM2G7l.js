@@ -1,0 +1,1 @@
+import{t as e}from"./app-B7Q6XSs5.js";var t=e();function n(e){return(0,t.jsx)(`img`,{...e,src:`/images/logo.jpeg`,alt:`Pure Sip`,className:`h-12 w-auto object-contain`})}export{n as t};
