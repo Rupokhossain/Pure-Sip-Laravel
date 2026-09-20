@@ -15,7 +15,7 @@ export default function Welcome({ products = [], settings = {} }) {
             <main className="flex-1">
                 <Banner settings={settings} />
                 <NaturalIngredients />
-                <FeaturedJuices products={products} />
+                <FeaturedJuices products={products} settings={settings} />
                 <WhyChooseUs data={settings?.why_choose_us} />
                 <FrequentlyAskedQuestion faqs={settings?.home_faqs} />
                 <Testimonials reviews={settings?.home_testimonials} />

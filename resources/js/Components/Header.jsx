@@ -7,6 +7,7 @@ import {
     PhoneCall,
     ArrowRight,
     Sparkles,
+    User, // লগইন আইকন যুক্ত করা হয়েছে
 } from "lucide-react";
 import { products } from "@/data/products";
 
@@ -20,7 +21,7 @@ const navLinks = [
 const quickTags = ["Hozmi", "Mint", "Digestion", "Lemon", "Tamarind", "Detox"];
 
 export default function Header() {
-    const { settings } = usePage().props;
+    const { settings, auth } = usePage().props;
 
     // ডায়নামিক সেটিংস ডাটা (না পেলে ডিফল্ট দেখাবে)
     const brandName = settings?.brand_name || "Pure Sip";
@@ -112,8 +113,9 @@ export default function Header() {
                         })}
                     </nav>
 
-                    {/* সার্চ বাটন ও কল একশন */}
-                    <div className="flex items-center space-x-3 sm:space-x-4 text-[#183928]">
+                    {/* সার্চ, লগইন বাটন ও কল একশন */}
+                    <div className="flex items-center space-x-2 sm:space-x-3 text-[#183928]">
+                        {/* সার্চ বাটন */}
                         <button
                             type="button"
                             onClick={() => setSearchOpen(true)}
@@ -123,6 +125,20 @@ export default function Header() {
                             <Search className="w-5 h-5 stroke-[2]" />
                         </button>
 
+                        {/* লগইন আইকন বাটন */}
+                        <Link
+                            href={auth?.user ? "/dashboard" : "/login"}
+                            title={auth?.user ? "Go to Dashboard" : "Login / Sign In"}
+                            aria-label="Account Login"
+                            className="p-2 hover:bg-[#eaf3ea] text-[#183928] rounded-full transition-colors cursor-pointer flex items-center justify-center relative group"
+                        >
+                            <User className="w-5 h-5 stroke-[2]" />
+                            {auth?.user && (
+                                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-emerald-500 rounded-full ring-2 ring-white" />
+                            )}
+                        </Link>
+
+                        {/* কল হেল্পলাইন বাটন */}
                         <a
                             href={`tel:${phone}`}
                             className="hidden sm:inline-flex items-center gap-2 bg-[#183928] hover:bg-[#122c1f] text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition-all"
@@ -131,7 +147,7 @@ export default function Header() {
                             <span>{phone}</span>
                         </a>
 
-                        {/* মোবাইল মেনু বাটন */}
+                        {/* মোবাইল মেনু টগল বাটন */}
                         <button
                             type="button"
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -147,7 +163,7 @@ export default function Header() {
                     </div>
                 </div>
 
-                {/* মোবাইল ড্রয়ার */}
+                {/* মোবাইল ড্রয়ার মেনু */}
                 {mobileMenuOpen && (
                     <div className="md:hidden bg-[#eaf3ea] px-6 py-6 space-y-4 shadow-xl">
                         <div className="space-y-3">
@@ -171,7 +187,17 @@ export default function Header() {
                             })}
                         </div>
 
-                        <div className="pt-3">
+                        <div className="pt-3 space-y-2">
+                            {/* মোবাইলের জন্য লগইন বাটন */}
+                            <Link
+                                href={auth?.user ? "/dashboard" : "/login"}
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="w-full flex items-center justify-center gap-2 bg-white text-[#183928] border border-[#183928]/15 hover:bg-[#183928] hover:text-white text-xs font-bold py-3 rounded-xl shadow-xs transition-colors"
+                            >
+                                <User className="w-4 h-4" />
+                                <span>{auth?.user ? "Admin Dashboard" : "Login to Account"}</span>
+                            </Link>
+
                             <a
                                 href={`tel:${phone}`}
                                 className="w-full flex items-center justify-center gap-2 bg-[#183928] text-white text-xs font-bold py-3.5 rounded-xl shadow"
