@@ -3,3 +3,4 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/puresipb/laravel_project/
     - /bin/cp -a * $DEPLOYPATH
+    - /bin/cp -a public/build /home/puresipb/public_html/
